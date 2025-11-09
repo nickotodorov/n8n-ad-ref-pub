@@ -6,7 +6,7 @@ It sends ad script tasks from Laravel to an n8n workflow that uses AI (e.g., Ope
 The workflow then returns the improved version back to Laravel to be persisted.
 
 ## Flow
-1. A new task is created via the Laravel API (POST /api/ad-scripts).
+A new task is created via the Laravel API (POST /api/ad-scripts).
 
 Laravel dispatches a job that sends the task data to n8n.
 
@@ -55,6 +55,6 @@ N8N_API_KEY=your-n8n-api-key
 npm install
 npm run dev
 ```
-5Import the Ad Script AI Agent.json workflow from the /n8n folder into your n8n dashboard.
+5. Import the 'Ad Script Refactor.json' workflow from the /n8n folder into your n8n dashboard.
 
 ![System Architecture Diagram](diagram.png)
