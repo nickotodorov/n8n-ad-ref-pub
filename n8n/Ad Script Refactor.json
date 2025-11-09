@@ -1,0 +1,73 @@
+{
+  "name": "Ad Script Refactor Clean",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ad-refactor",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-352, -752],
+      "id": "d8a874ea-f6f2-4967-9402-ba45715fd4c0",
+      "name": "Webhook",
+      "webhookId": "3dbad0c3-df07-464b-9822-115a9b9a3a09"
+    },
+    {
+      "parameters": {
+        "modelId": "gpt-4o",
+        "responses": {
+          "values": [
+            {
+              "content": "[{\"role\":\"system\",\"content\":\"You are a helpful assistant that improves ad scripts.\"},{\"role\":\"user\",\"content\":\"Analyze the following facebook ad script and generate an improved version according to the outcome description. Reference script: {{$json[\\\"reference_script\\\"]}} Outcome description: {{$json[\\\"outcome_description\\\"]}} Return JSON like this: {\\\"task_id\\\": \\\"{{$json[\\\"task_id\\\"]}}\\\",\\\"new_script\\\": \\\"...\\\",\\\"analysis\\\": \\\"...\\\"}\"}]"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2,
+      "position": [-48, -736],
+      "id": "9ec2a4a9-0c6b-4d07-b212-551ae3448803",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "1Hq0fyfoZuPlUSsz",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$json[\"callback_url\"]}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"new_script\": \"{{$json[\\\"new_script\\\"]}}\",\"analysis\": \"{{$json[\\\"analysis\\\"]}}\"}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [288, -768],
+      "id": "2eac034c-1e74-4193-904a-d0317a8b3bb1",
+      "name": "HTTP Request"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{"node": "Message a model", "type": "main", "index": 0}]]
+    },
+    "Message a model": {
+      "main": [[{"node": "HTTP Request", "type": "main", "index": 0}]]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "c14a01bc-12b5-4dd5-8cc2-bc126f4f1ba2",
+  "id": "jh3GxiiXe3ezrFSA"
+}
